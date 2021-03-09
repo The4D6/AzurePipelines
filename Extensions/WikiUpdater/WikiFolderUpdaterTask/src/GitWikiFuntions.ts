@@ -8,7 +8,7 @@ import { BranchSummary } from "simple-git/typings/response";
 import * as glob from "glob";
 
 // A wrapper to make sure that directory delete is handled in sync
-function rimrafPromise (localpath)  {
+function rimrafPromise(localpath) {
     return new Promise((resolve, reject) => {
         rimraf(localpath, () => {
             resolve();
@@ -24,28 +24,28 @@ function mkDirByPathSync(targetDir, { isRelativeToScript = false } = {}) {
     const baseDir = isRelativeToScript ? __dirname : ".";
 
     return targetDir.split(sep).reduce((parentDir, childDir) => {
-      const curDir = path.resolve(baseDir, parentDir, childDir);
-      try {
-        fs.mkdirSync(curDir);
-      } catch (err) {
-        if (err.code === "EEXIST") { // curDir already exists!
-          return curDir;
+        const curDir = path.resolve(baseDir, parentDir, childDir);
+        try {
+            fs.mkdirSync(curDir);
+        } catch (err) {
+            if (err.code === "EEXIST") { // curDir already exists!
+                return curDir;
+            }
+
+            // To avoid `EISDIR` error on Mac and `EACCES`-->`ENOENT` and `EPERM` on Windows.
+            if (err.code === "ENOENT") { // Throw the original parentDir error on curDir `ENOENT` failure.
+                throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`);
+            }
+
+            const caughtErr = ["EACCES", "EPERM", "EISDIR"].indexOf(err.code) > -1;
+            if (!caughtErr || caughtErr && curDir === path.resolve(targetDir)) {
+                throw err; // Throw if it's just the last created dir.
+            }
         }
 
-        // To avoid `EISDIR` error on Mac and `EACCES`-->`ENOENT` and `EPERM` on Windows.
-        if (err.code === "ENOENT") { // Throw the original parentDir error on curDir `ENOENT` failure.
-          throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`);
-        }
-
-        const caughtErr = ["EACCES", "EPERM", "EISDIR"].indexOf(err.code) > -1;
-        if (!caughtErr || caughtErr && curDir === path.resolve(targetDir)) {
-          throw err; // Throw if it's just the last created dir.
-        }
-      }
-
-      return curDir;
+        return curDir;
     }, initDir);
-  }
+}
 
 export function GetWorkingFolder(localpath, folder, logInfo): any {
     if (folder) {
@@ -75,7 +75,7 @@ export function GetProtocol(url: string, logInfo): string {
     var protocol = "https";
     logInfo(`The provided repo URL is ${url}`);
     if (url.indexOf("://") !== -1) {
-        protocol = url.substr(0, url.indexOf("//") - 1 );
+        protocol = url.substr(0, url.indexOf("//") - 1);
     }
     logInfo(`The protocol is ${protocol}`);
     return protocol;
@@ -127,7 +127,7 @@ export async function UpdateGitWikiFolder(
         remote = `${protocol}://${repo}`;
         logremote = remote;
         extraHeaders = [`-c http.extraheader=AUTHORIZATION: bearer ${password}`];
-        logInfo (`Injecting the authentication via the clone command using paramter -c http.extraheader='AUTHORIZATION: bearer ***'`);
+        logInfo(`Injecting the authentication via the clone command using paramter -c http.extraheader='AUTHORIZATION: bearer ***'`);
     } else {
         if (password === null) {
             remote = `${protocol}://${repo}`;
@@ -180,7 +180,7 @@ export async function UpdateGitWikiFolder(
             var fileName = GetFileName(files[index]);
             var folder = GetFolder(files[index], sourceFolder);
             if (targetFolder) {
-                folder =  path.join(targetFolder, folder);
+                folder = path.join(targetFolder, folder);
             }
             var workingPath = GetWorkingFolder(localpath, folder, logInfo);
             var targetFile = `${workingPath}/${fileName}`;
@@ -255,6 +255,6 @@ export async function UpdateGitWikiFolder(
 
 function sleep(ms) {
     return new Promise((resolve) => {
-      setTimeout(resolve, ms);
+        setTimeout(resolve, ms);
     });
 }
