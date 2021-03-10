@@ -15,6 +15,7 @@ import {
 
 var repo = tl.getInput("repo");
 var targetFolder = tl.getInput("targetFolder");
+var clearTargetFolder = tl.getInput("clearTargetFolder")
 var localpath = tl.getInput("localpath");
 var message = tl.getInput("message");
 var gitname = tl.getInput("gitname");
@@ -41,6 +42,7 @@ try {
 
 console.log(`Variable: Repo [${repo}]`);
 console.log(`Variable: TargetFolder [${targetFolder}]`);
+console.log(`Variable: ClearTargetFolder [${clearTargetFolder}]`);
 console.log(`Variable: Commit Message [${message}]`);
 console.log(`Variable: Git Username [${gitname}]`);
 console.log(`Variable: Git Email [${gitemail}]`);
