@@ -15,7 +15,7 @@ import {
 
 var repo = tl.getInput("repo");
 var targetFolder = tl.getInput("targetFolder");
-var clearTargetFolder = tl.getInput("clearTargetFolder")
+var clearTargetFolder = tl.getBoolInput("clearTargetFolder");
 var localpath = tl.getInput("localpath");
 var message = tl.getInput("message");
 var gitname = tl.getInput("gitname");
@@ -69,4 +69,4 @@ if (useAgentToken === true) {
 var protocol = GetProtocol(repo, logInfo);
 repo = GetTrimmedUrl(repo, logInfo);
 
-UpdateGitWikiFolder(protocol, repo, localpath, user, password, gitname, gitemail, targetFolder, message, sourceFolder, filter, logInfo, logError, replaceFile, appendToFile, tagRepo, tag, injectExtraHeader, branch, retries);
+UpdateGitWikiFolder(protocol, repo, localpath, user, password, gitname, gitemail, targetFolder, message, sourceFolder, filter, logInfo, logError, replaceFile, appendToFile, tagRepo, tag, injectExtraHeader, branch, retries, clearTargetFolder);

@@ -59,7 +59,7 @@
             "type": "boolean",
             "label": "Clean down the target folder? ",
             "defaultValue": "False",
-            "required": true,
+            "required": false,
             "helpMarkDown": "Clean down the target folder to remove old documents"
         },
         {

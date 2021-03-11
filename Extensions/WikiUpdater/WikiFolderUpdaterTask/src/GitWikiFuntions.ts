@@ -116,7 +116,8 @@ export async function UpdateGitWikiFolder(
     tag,
     injectExtraHeader,
     branch,
-    maxRetries) {
+    maxRetries,
+    clearTargetFolder) {
     const git = simplegit();
 
     let remote = "";
@@ -174,6 +175,14 @@ export async function UpdateGitWikiFolder(
         logInfo(`Checking for files using the filter ${sourceFolder}/${filter}`);
         var files = glob.sync(`${sourceFolder}/${filter}`);
         logInfo(`Found ${files.length} files`);
+
+        // Clean out the target folder
+        if (clearTargetFolder) {
+            logInfo(`Clearing down ${targetFolder}`);
+            await rimraf(targetFolder, function() {
+                logInfo(`Completed clear down.`);
+            });
+        }
 
         for (let index = 0; index < files.length; index++) {
             logInfo(`Processing ${files[index]}`);
